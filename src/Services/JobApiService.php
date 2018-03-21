@@ -52,14 +52,16 @@ class JobApiService extends ApiService
     }
     
     /**
-     * GET $baseUrl/departments
+     * GET $baseUrl/departments(?render_as=list|tree)
      *
+     * @param  boolean     $tree     Render the results as a tree
      * @return string   JSON response string from Greenhouse API.
      * @throws GreenhouseAPIResponseException for non-200 responses
      */
-    public function getDepartments()
+    public function getDepartments($tree=false)
     {
-        return $this->_apiClient->get('departments');
+        $queryString = $this->getRenderAsQuery('departments', $tree);
+        return $this->_apiClient->get($queryString);
     }
     
     /**
@@ -134,6 +136,15 @@ class JobApiService extends ApiService
     public function getQuestionsQuery($uriString, $showQuestions=false)
     {
         $queryString = $showQuestions ? '&questions=true' : '';
+        return $uriString . $queryString;
+    }
+
+    /**
+     * Shortcut method appends render_as=list|tree to the query string for departments
+     */
+    public function getRenderAsQuery($uriString, $showTree=false)
+    {
+        $queryString = '?render_as=' . ($showTree ? 'tree' : 'list');
         return $uriString . $queryString;
     }
 }

@@ -75,7 +75,7 @@ And to get a specific office:
 $jobApiService->getOffice($officeId);
 ```
 
-The only additional parameters used in any case are for the "content" and "questions" parameters in the Jobs endpoint.  These are managed with boolean arguments that default to `false` in the `getJobs` and `getJob` methods.  To get all jobs with their content included, you'd call:
+The only additional parameters for the Jobs endpoint are for the "content" and "questions" parameters.  These are managed with boolean arguments that default to `false` in the `getJobs` and `getJob` methods.  To get all jobs with their content included, you'd call:
 
 ```
 $jobApiService->getJobs(true);
@@ -86,6 +86,13 @@ while to get a job with its questions included, you'd call:
 ```
 $jobApiService->getJob($jobId, true);
 ```
+
+Similarly, there is one parameter for the Departments endpoint - "tree" - that is managed with a boolean argument that defaults to `false` in the `getDepartments` method.  Setting "tree" to `true` will fetch the Departments list as a tree, while setting `false` or leaving the parameter empty will render the results as the default list.  To get all departments structured as a tree with their content included, you'd call:
+
+```
+$jobApiService->getDepartments(true);
+```
+
 # The Application Service
 Use this service to post Applications in to Greenhouse.  Use of this Service requires a Job Board API key which can be generated in Greenhouse.  Example usage of this service follows:
 
