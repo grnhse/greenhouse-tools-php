@@ -147,10 +147,10 @@ class ApplicationService extends ApiService
      */
     private function _hasRequiredValuesForFiles($postVars, $key)
     {
-        $contentKey = "${key}_content";
-        $contentFilenameKey = "${key}_content_filename";
-        $urlKey = "${key}_url";
-        $urlFilenameKey = "${key}_url_filename";
+        $contentKey = "{$key}_content";
+        $contentFilenameKey = "{$key}_content_filename";
+        $urlKey = "{$key}_url";
+        $urlFilenameKey = "{$key}_url_filename";
         
         if (array_key_exists($contentKey, $postVars) && 
             array_key_exists($contentFilenameKey, $postVars) && 
