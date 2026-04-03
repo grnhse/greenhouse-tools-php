@@ -2,6 +2,7 @@
   <testsuites>
     <testsuite name="Greenhouse Services PHP Test Suite">
       <directory>./tests/</directory>
+      <exclude>./tests/Bootstrap.php</exclude>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -7,6 +7,10 @@ use Greenhouse\GreenhouseToolsPhp\Services\ApiService;
 
 class GreenhouseServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private string $apiKey;
+    private string $boardToken;
+    private GreenhouseService $greenhouseService;
+
     public function setUp(): void
     {
         $this->apiKey       = 'testapikey';

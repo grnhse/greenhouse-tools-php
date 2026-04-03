@@ -5,7 +5,9 @@ namespace Greenhouse\GreenhouseToolsPhp\Services;
 class JobBoardService
 {
     const BOARDS_URL = 'https://boards.greenhouse.io/';
-    
+
+    private string $_clientToken;
+
     public function __construct($clientToken)
     {
         $this->_clientToken = $clientToken;

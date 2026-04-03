@@ -8,6 +8,8 @@ use Greenhouse\GreenhouseToolsPhp\Services\ApplicationService;
 
 class ApiServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private ApiService $apiService;
+
     public function setUp(): void
     {
         $this->apiService = new ApiService();

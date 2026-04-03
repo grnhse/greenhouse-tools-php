@@ -7,6 +7,9 @@ use Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse;
 
 class GuzzleClientTest extends \PHPUnit\Framework\TestCase
 {
+    private GuzzleClient $client;
+    private string $resumePath;
+
     public function setUp(): void
     {
         $this->client = new GuzzleClient(array('base_uri' => 'http://www.example.com'));
@@ -122,14 +125,13 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
             '<https://harvest.greenhouse.io/v1/candidates?page=8273&per_page=100>; rel="last"'
         );
 
-        $mockResponse = $this->createMock('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
+        $mockResponse = $this->createStub('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
         $mockResponse->method('getHeader')
                      ->willReturn($linksResponse);
         $this->client->guzzleResponse = $mockResponse;
 
         $reflector = new \ReflectionClass('Greenhouse\GreenhouseToolsPhp\Clients\GuzzleClient');
         $method = $reflector->getMethod('_setLinks');
-        $method->setAccessible(true);
 
         $this->assertEquals($this->client->getNextLink(), '');
         $this->assertEquals($this->client->getPrevLink(), '');
@@ -146,14 +148,13 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
     {
         $linksResponse = array('');
 
-        $mockResponse = $this->createMock('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
+        $mockResponse = $this->createStub('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
         $mockResponse->method('getHeader')
                      ->willReturn($linksResponse);
         $this->client->guzzleResponse = $mockResponse;
 
         $reflector = new \ReflectionClass('Greenhouse\GreenhouseToolsPhp\Clients\GuzzleClient');
         $method = $reflector->getMethod('_setLinks');
-        $method->setAccessible(true);
 
         $this->assertEquals($this->client->getNextLink(), '');
         $this->assertEquals($this->client->getPrevLink(), '');
@@ -173,14 +174,13 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
             '<https://harvest.greenhouse.io/v1/candidates?page=8273&per_page=100>; rel="last"'
         );
 
-        $mockResponse = $this->createMock('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
+        $mockResponse = $this->createStub('Greenhouse\GreenhouseToolsPhp\Tests\Clients\Mocks\MockGuzzleResponse');
         $mockResponse->method('getHeader')
                      ->willReturn($linksResponse);
         $this->client->guzzleResponse = $mockResponse;
 
         $reflector = new \ReflectionClass('Greenhouse\GreenhouseToolsPhp\Clients\GuzzleClient');
         $method = $reflector->getMethod('_setLinks');
-        $method->setAccessible(true);
 
         $this->assertEquals($this->client->getNextLink(), '');
         $this->assertEquals($this->client->getPrevLink(), '');

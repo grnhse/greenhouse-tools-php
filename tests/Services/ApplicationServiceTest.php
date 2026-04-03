@@ -7,6 +7,8 @@ use Greenhouse\GreenhouseToolsPhp\Services\JobApiService;
 
 class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private ApplicationService $appService;
+
     public function setUp(): void
     {
         $this->appService = new ApplicationService('test_api_key', 'greenhouse');
@@ -64,9 +66,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
     
     public function testValidateRequiredFieldsPass()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJson());
         $this->appService->setJobApiService($apiStub);
         
@@ -85,9 +85,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
     
     public function testValidateRequiredFieldsWithMultiselect()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJsonWithMultiselect());
         $this->appService->setJobApiService($apiStub);
         
@@ -111,9 +109,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateRequiredFieldsWithMultiselectLegacy()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJsonWithMultiselect());
         $this->appService->setJobApiService($apiStub);
         
@@ -133,9 +129,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
     
     public function testValidateRequiredFieldsFailSingle()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJson());
         $this->appService->setJobApiService($apiStub);
         
@@ -155,9 +149,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
     
     public function testValidateRequiredFieldsFailMultiple()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJson());
         $this->appService->setJobApiService($apiStub);
         
@@ -336,9 +328,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRequiredFields()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJson());
         $this->appService->setJobApiService($apiStub);
         
@@ -356,9 +346,7 @@ class ApplicationServiceTest extends \PHPUnit\Framework\TestCase
     
     public function testGetRequiredFieldsNoRequiredFields()
     {
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Services\JobApiService');
         $apiStub->method('getJob')->willReturn($this->getTestJobJsonNothingRequired());
         $this->appService->setJobApiService($apiStub);
         

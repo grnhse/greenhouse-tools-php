@@ -10,11 +10,10 @@ jobs:
       php-version:
         type: string
     docker:
-      - image: circleci/php:<< parameters.php-version >>-node-browsers
+      - image: cimg/php:<< parameters.php-version >>
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.17
+      - setup_remote_docker
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "composer.json" }}
@@ -31,4 +30,4 @@ workflows:
       - test:
           matrix:
             parameters:
-              php-version: ["7.3", "7.4", "8.0"]
+              php-version: ["8.5.4"]

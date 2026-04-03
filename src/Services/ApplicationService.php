@@ -123,10 +123,10 @@ class ApplicationService extends ApiService
     {
         foreach ($keys as $key) {
             $requiredKey = $this->findKey($key, $postVars);
-            if (array_key_exists($requiredKey, $postVars) && $postVars[$requiredKey] !== '') return true;
+            if ($requiredKey !== null && array_key_exists($requiredKey, $postVars) && $postVars[$requiredKey] !== '') return true;
         }
         
-        if ($this->_hasRequiredValuesForFiles($postVars, $key)) return true;
+        if (isset($key) && $this->_hasRequiredValuesForFiles($postVars, $key)) return true;
 
         return false;
     }
@@ -147,11 +147,11 @@ class ApplicationService extends ApiService
      */
     private function _hasRequiredValuesForFiles($postVars, $key)
     {
-        $contentKey = "${key}_content";
-        $contentFilenameKey = "${key}_content_filename";
-        $urlKey = "${key}_url";
-        $urlFilenameKey = "${key}_url_filename";
-        
+        $contentKey = "{$key}_content";
+        $contentFilenameKey = "{$key}_content_filename";
+        $urlKey = "{$key}_url";
+        $urlFilenameKey = "{$key}_url_filename";
+
         if (array_key_exists($contentKey, $postVars) && 
             array_key_exists($contentFilenameKey, $postVars) && 
             $postVars[$contentKey] !== '' &&

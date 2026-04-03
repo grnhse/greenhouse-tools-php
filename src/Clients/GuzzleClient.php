@@ -16,10 +16,10 @@ class GuzzleClient implements ApiClientInterface
 {
     public $guzzleResponse;
     private $_client;
-    private $_nextLink;
-    private $_prevLink;
-    private $_lastLink;
-    
+    private string $_nextLink = '';
+    private string $_prevLink = '';
+    private string $_lastLink = '';
+
     /**
      * Constructor should receive an array that would be understood by the Guzzle
      * client constructor.  Constructor hands off an unmodified array to the Guzzle
