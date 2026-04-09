@@ -9,6 +9,10 @@ use Greenhouse\GreenhouseToolsPhp\Tools\HarvestHelper;
  */
 class HarvestHelperTest extends \PHPUnit\Framework\TestCase
 {
+    private string $json;
+    private HarvestHelper $parser;
+    private array $parameters;
+
     public function setUp(): void
     {
         $root = realpath(dirname(__FILE__));

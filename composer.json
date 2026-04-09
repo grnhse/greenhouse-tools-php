@@ -11,12 +11,12 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
-        "guzzlehttp/guzzle": ">=7.4.5"
+        "php": ">=8.5.4",
+        "guzzlehttp/guzzle": ">=7.10"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
-        "php": ">=7.3"
+        "php": ">=8.5.4"
 
     },
     "autoload": {

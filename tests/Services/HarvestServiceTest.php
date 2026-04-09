@@ -12,12 +12,13 @@ use Greenhouse\GreenhouseToolsPhp\GreenhouseService;
  */
 class HarvestServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private HarvestService $harvestService;
+    private string $expectedAuth;
+
     public function setUp(): void
     {
         $this->harvestService = new HarvestService('greenhouse');
-        $apiStub = $this->getMockBuilder('\Greenhouse\GreenhouseToolsPhp\Client\GuzzleClient')
-                        ->setMethods(array('send', 'getNextLink', 'getPrevLink', 'getLastLink'))
-                        ->getMock();
+        $apiStub = $this->createStub('\Greenhouse\GreenhouseToolsPhp\Clients\GuzzleClient');
         $apiStub->method('getNextLink')->willReturn('http://example.com/next');
         $apiStub->method('getPrevLink')->willReturn('http://example.com/prev');
         $apiStub->method('getLastLink')->willReturn('http://example.com/last');

@@ -6,6 +6,8 @@ use Greenhouse\GreenhouseToolsPhp\Services\JobBoardService;
 
 class JobBoardServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private JobBoardService $jobBoardService;
+
     public function setUp(): void
     {
         $this->jobBoardService = new JobBoardService('test_token');

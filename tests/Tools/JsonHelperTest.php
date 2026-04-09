@@ -9,6 +9,8 @@ use Greenhouse\GreenhouseToolsPhp\Tools\JsonHelper;
  */
 class JsonHelperTest extends \PHPUnit\Framework\TestCase
 {
+    private string $json;
+
     public function setUp(): void
     {
         $root = realpath(dirname(__FILE__));

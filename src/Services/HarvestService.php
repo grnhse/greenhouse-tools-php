@@ -108,7 +108,7 @@ class HarvestService extends ApiService
     {
         $this->_harvest = $this->_harvestHelper->parse('postActivityFeedForCandidate', $parameters);
         $this->_harvest['url'] = 'candidates/' . $parameters['id'] . '/activity_feed/notes';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
     
     public function putAnonymizeCandidate($parameters=array())
@@ -170,7 +170,7 @@ class HarvestService extends ApiService
     {
         $this->_harvest = $this->_harvestHelper->parse('putMergeCandidate', $parameters);
         $this->_harvest['url'] = 'candidates/merge';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
     
     /**
@@ -202,21 +202,21 @@ class HarvestService extends ApiService
     {
         $this->_harvest = $this->_harvestHelper->parse('postCustomFieldOptionsForCustomField', $parameters);
         $this->_harvest['url'] = 'custom_field/' . $parameters['id'] . '/custom_field_options';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
 
     public function deleteCustomFieldOptionsForCustomField($parameters=array())
     {
         $this->_harvest = $this->_harvestHelper->parse('deleteCustomFieldOptionsForCustomField', $parameters);
         $this->_harvest['url'] = 'custom_field/' . $parameters['id'] . '/custom_field_options';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
 
     public function patchCustomFieldOptionsForCustomField($parameters=array())
     {
         $this->_harvest = $this->_harvestHelper->parse('patchCustomFieldOptionsForCustomField', $parameters);
         $this->_harvest['url'] = 'custom_field/' . $parameters['id'] . '/custom_field_options';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
     
     public function getEeoc($parameters=array())
@@ -230,7 +230,7 @@ class HarvestService extends ApiService
     {
         $this->_harvest = $this->_harvestHelper->parse('putHiringTeamForJob', $parameters);
         $this->_harvest['url'] = 'jobs/' . $parameters['id'] . '/hiring_team';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
     
     public function getCandidateTags($parameters=array())
@@ -251,14 +251,14 @@ class HarvestService extends ApiService
     {
         $this->_harvest = $this->_harvestHelper->parse('patchEnableUser', $parameters);
         $this->_harvest['url'] = 'users/' . $parameters['id'] . '/enable';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
     
     public function patchDisableUser($parameters=array())
     {
         $this->_harvest = $this->_harvestHelper->parse('patchDisableUser', $parameters);
         $this->_harvest['url'] = 'users/' . $parameters['id'] . '/disable';
-        $this->sendRequest();
+        return $this->sendRequest();
     }
 
     public function getHiringTeamForJob($parameters=array())
@@ -270,13 +270,13 @@ class HarvestService extends ApiService
     public function postHiringTeamForJob($parameters=array())
     {
         $this->_harvest = $this->_harvestHelper->parse('postHiringTeamForJob', $parameters);
-        $this->_trimUrlAndSendRequest();
+        return $this->_trimUrlAndSendRequest();
     }
 
     public function deleteHiringTeamForJob($parameters=array())
     {
         $this->_harvest = $this->_harvestHelper->parse('deleteHiringTeamForJob', $parameters);
-        $this->_trimUrlAndSendRequest();
+        return $this->_trimUrlAndSendRequest();
     }
 
     public function getQuestionSetsForDemographics($parameters=array())

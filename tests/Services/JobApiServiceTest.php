@@ -6,6 +6,10 @@ use Greenhouse\GreenhouseToolsPhp\Services\JobApiService;
 
 class JobApiServiceTest extends \PHPUnit\Framework\TestCase
 {
+    private JobApiService $jobApiService;
+    private JobApiService $errorService;
+    private string $baseUrl;
+
     public function setUp(): void
     {
         $this->jobApiService = new JobApiService('greenhouse');
