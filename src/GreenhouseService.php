@@ -9,11 +9,15 @@ class GreenhouseService
 {
     private $_apiKey;
     private $_boardToken;
+    private $_publicAuthKey;
+    private $_secretAuthKey;
     
     public function __construct($options=array())
     {
-        $this->_apiKey      = isset($options['apiKey'])     ? $options['apiKey']     : null;
-        $this->_boardToken  = isset($options['boardToken']) ? $options['boardToken'] : null;
+        $this->_apiKey          = isset($options['apiKey'])         ? $options['apiKey']        : null;
+        $this->_boardToken      = isset($options['boardToken'])     ? $options['boardToken']    : null;
+        $this->_publicAuthKey   = isset($options['publicAuthKey'])  ? $options['publicAuthKey'] : null;
+        $this->_secretAuthKey   = isset($options['secretAuthKey'])  ? $options['secretAuthKey'] : null;
     }
     
     /**
@@ -53,6 +57,6 @@ class GreenhouseService
     
     public function getHarvestService()
     {
-        return new \Greenhouse\GreenhouseToolsPhp\Services\HarvestService($this->_apiKey);
+        return new \Greenhouse\GreenhouseToolsPhp\Services\HarvestService($this->_publicAuthKey, $this->_secretAuthKey);
     }
 }

@@ -134,14 +134,8 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
         $method = $reflector->getMethod('_setLinks');
 
         $this->assertEquals($this->client->getNextLink(), '');
-        $this->assertEquals($this->client->getPrevLink(), '');
-        $this->assertEquals($this->client->getLastLink(), '');
-
         $method->invokeArgs($this->client, array());
-
         $this->assertEquals($this->client->getNextLink(), 'https://harvest.greenhouse.io/v1/candidates?page=3&per_page=100');
-        $this->assertEquals($this->client->getPrevLink(), 'https://harvest.greenhouse.io/v1/candidates?page=1&per_page=100');
-        $this->assertEquals($this->client->getLastLink(), 'https://harvest.greenhouse.io/v1/candidates?page=8273&per_page=100');
     }
 
     public function testLinksNoneIncluded()
@@ -157,20 +151,14 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
         $method = $reflector->getMethod('_setLinks');
 
         $this->assertEquals($this->client->getNextLink(), '');
-        $this->assertEquals($this->client->getPrevLink(), '');
-        $this->assertEquals($this->client->getLastLink(), '');
-
         $method->invokeArgs($this->client, array());
-
         $this->assertEquals($this->client->getNextLink(), '');
-        $this->assertEquals($this->client->getPrevLink(), '');
-        $this->assertEquals($this->client->getLastLink(), '');
     }
 
     public function testLinksSomeIncluded()
     {
         $linksResponse = array(
-            '<https://harvest.greenhouse.io/v1/candidates?page=1&per_page=100>; rel="prev",' .
+            '<https://harvest.greenhouse.io/v1/candidates?cursor=abcdefg>; rel="next",' .
             '<https://harvest.greenhouse.io/v1/candidates?page=8273&per_page=100>; rel="last"'
         );
 
@@ -183,13 +171,7 @@ class GuzzleClientTest extends \PHPUnit\Framework\TestCase
         $method = $reflector->getMethod('_setLinks');
 
         $this->assertEquals($this->client->getNextLink(), '');
-        $this->assertEquals($this->client->getPrevLink(), '');
-        $this->assertEquals($this->client->getLastLink(), '');
-
         $method->invokeArgs($this->client, array());
-
-        $this->assertEquals($this->client->getNextLink(), '');
-        $this->assertEquals($this->client->getPrevLink(), 'https://harvest.greenhouse.io/v1/candidates?page=1&per_page=100');
-        $this->assertEquals($this->client->getLastLink(), 'https://harvest.greenhouse.io/v1/candidates?page=8273&per_page=100');
+        $this->assertEquals($this->client->getNextLink(), 'https://harvest.greenhouse.io/v1/candidates?cursor=abcdefg');
     }
 }

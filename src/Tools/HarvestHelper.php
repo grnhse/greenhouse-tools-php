@@ -17,18 +17,20 @@ class HarvestHelper
         $matched = preg_match($pattern, $methodName, $matches);
         
         if (!$matched) throw new GreenhouseServiceException("Harvest Service: invalid method $methodName.");
-        
+
         $return['method'] = $matches[1];
         $return['url'] = $this->methodToEndpoint($matches[2], $parameters);
-        
+
         if (isset($parameters['id'])) unset($parameters['id']);
-        if (isset($parameters['second_id'])) unset($parameters['second_id']);
+        if (isset($parameters['bulk'])) unset($parameters['bulk']);
+
         if (isset($parameters['headers'])) {
             $return['headers'] = $parameters['headers'];
             unset($parameters['headers']);
         } else {
             $return['headers'] = array();
         }
+
         if (isset($parameters['body'])) {
             $return['body'] = $parameters['body'];
             unset($parameters['body']);
@@ -40,36 +42,43 @@ class HarvestHelper
         
         return $return;
     }
+
+    /**
+      * This parses method names into endpoints.
+      * The two accepted formats are methodX and methodXForY.
+      */
     
     public function methodToEndpoint($methodText, $parameters)
     {
         $id = isset($parameters['id']) ? $parameters['id'] : null;
-        $secondId = isset($parameters['second_id']) ? $parameters['second_id'] : null;
+        $bulk = isset($parameters['bulk']) ? $parameters['bulk'] : null;
         $objects = explode('For', $methodText);
-        
+
         // A single object, just return the snaked version of it.
         if (sizeof($objects) == 1) {
             $url = $this->_decamelizeAndPluralize($objects[0]);
             if ($id) $url .= "/$id";
-            
+            if ($bulk === true) $url .= '/bulk';
+
         // Double object, expect the format object/id/object
         } else if (sizeof($objects) == 2) {
-            $url = $this->_decamelizeAndPluralize($objects[1]) .
-                    $this->_getDivider($id) .
-                    $this->_decamelizeAndPluralize($objects[0]);
-            $url = $secondId ? $url . '/' . $secondId : $url;
-        
-        // Triple object, expect the format object/id/object/object
-        } else if (sizeof($objects) == 3) {
-            if (!$id) throw new GreenhouseServiceException("Harvest Service: method call $methodText must include an id parameter");
-            $url = $this->_decamelizeAndPluralize($objects[2]) .
-                    $this->_getDivider($id) .
-                    $this->_decamelizeAndPluralize($objects[0]) . '/' . 
-                    $this->_decamelizeAndPluralize($objects[1]);
+            if ($id) {
+                $url = $this->_decamelizeAndPluralize($objects[1]) .
+                        $this->_getDivider($id) .
+                        $this->_decamelizeAndPluralize($objects[0]);
+            } else if ($bulk === true) {
+                $url = $this->_decamelizeAndPluralize($objects[1]) .
+                        '/' .
+                        $this->_decamelizeAndPluralize($objects[0]) .
+                        '/bulk';
+            }
+            if (!isset($url)) {
+                throw new GreenhouseServiceException("Harvest Service: Invalid method call $methodText. ID or bulk parameter is required for method calls with 'For' in them.");
+            }
         } else {
             throw new GreenhouseServiceException("Harvest Service: Invalid method call $methodText.");
         }
-        
+
         return $url;
     }
 
