@@ -1,5 +1,9 @@
 # Greenhouse Service Tools For PHP
 
+**IMPORTANT NOTE**: Harvest V1/V2 will be going out of service on 8/31/2026. You should upgrade
+to v3 as soon as possible. V3 includes support for the latest version of Guzzle and 
+PHP 8.5.4, but drops support for older versions of PHP.
+
 This package of tools is provided by Greenhouse for customers who use PHP.  There are four tools provided.
 
 1. **Job Board Service**: Used to embed iframes in your template or view files.  
@@ -13,9 +17,6 @@ This package of tools is provided by Greenhouse for customers who use PHP.  Ther
     - 7.3 or greater for V2.
     - 8.5 or greater for V3.
 2. [Composer](https://getcomposer.org/).  You should be using Composer to manage this package. 
-
-Harvest V1/V2 will be going out of service on 8/31/2026. You should upgrade 
-to v3 as soon as possible. V3 includes support for the latest version of Guzzle and PHP 8.5.4, but drops support for older versions of PHP.
 
 # Installing
 This is available on Packagist.  Install via Composer.  Add the following to your requirements:
