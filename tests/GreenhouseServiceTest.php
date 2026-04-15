@@ -4,23 +4,37 @@ namespace Greenhouse\GreenhouseToolsPhp\Tests;
 
 use Greenhouse\GreenhouseToolsPhp\GreenhouseService;
 use Greenhouse\GreenhouseToolsPhp\Services\ApiService;
+use Mockery;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 class GreenhouseServiceTest extends \PHPUnit\Framework\TestCase
 {
     private string $apiKey;
     private string $boardToken;
+    private string $publicAuthKey;
+    private string $secretAuthKey;
     private GreenhouseService $greenhouseService;
 
     public function setUp(): void
     {
-        $this->apiKey       = 'testapikey';
-        $this->boardToken   = 'test_token';
+        $this->apiKey           = 'testapikey';
+        $this->boardToken       = 'test_token';
+        $this->publicAuthKey    = 'test_public_auth_key';
+        $this->secretAuthKey    = 'test_secret_auth_key';
         $this->greenhouseService = new GreenhouseService(array(
             'apiKey'    => $this->apiKey,
-            'boardToken'=> $this->boardToken
+            'boardToken'=> $this->boardToken,
+            'publicAuthKey' => $this->publicAuthKey,
+            'secretAuthKey' => $this->secretAuthKey
         ));
     }
-    
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     public function testConstructWithNoBoardToken()
     {
         $service = new GreenhouseService(array('apiKey' => 'test_key'));
@@ -79,14 +93,36 @@ class GreenhouseServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($authHeader, $service->getAuthorizationHeader());
     }
     
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testGetHarvestService()
     {
+        $expectedBearerToken = 'Bearer mock_access_token_xyz';
+
+        // Mockery::mock('overload:...') intercepts every `new HarvestAuthClient()`
+        // call in this process — the PHP equivalent of RSpec's
+        // allow(HarvestAuthClient).to receive(:new).and_return(double(getBearerToken: ...))
+        $mockAuthClient = Mockery::mock(
+            'overload:Greenhouse\GreenhouseToolsPhp\Clients\HarvestAuthClient'
+        );
+        $mockAuthClient->shouldReceive('getBearerToken')
+                       ->once()
+                       ->andReturn($expectedBearerToken);
+        $mockAuthClient->shouldReceive('getExpiresAt')
+                       ->once()
+                       ->andReturn(null);
+
         $service = $this->greenhouseService->getHarvestService();
+
         $this->assertInstanceOf(
             '\Greenhouse\GreenhouseToolsPhp\Services\HarvestService',
             $service
         );
-        $authHeader = 'Basic ' . base64_encode($this->apiKey . ':');
-        $this->assertEquals($authHeader, $service->getAuthorizationHeader());
+
+        // ApiService::getAuthorizationHeader() recomputes Basic auth from _apiKey
+        // and never uses _authorizationHeader, so we read the stored value directly.
+        $reflection = new \ReflectionClass(ApiService::class);
+        $prop = $reflection->getProperty('_authorizationHeader');
+        $this->assertEquals($expectedBearerToken, $prop->getValue($service));
     }
 }

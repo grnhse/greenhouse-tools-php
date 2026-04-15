@@ -17,8 +17,6 @@ class GuzzleClient implements ApiClientInterface
     public $guzzleResponse;
     private $_client;
     private string $_nextLink = '';
-    private string $_prevLink = '';
-    private string $_lastLink = '';
 
     /**
      * Constructor should receive an array that would be understood by the Guzzle
@@ -148,18 +146,15 @@ class GuzzleClient implements ApiClientInterface
     }
 
     /**
-     * Set the next/prev/last links using the current response object.
+     * Harvest V1/V2 defined a previous and last link.
+     * Harvest V3 removes these links. Only next link is defined with a cursor.
      */
     private function _setLinks()
     {
         $links = Psr7\Header::parse($this->guzzleResponse->getHeader('Link'));
         foreach ($links as $link) {
-            if ($link['rel'] == 'last') {
-                $this->_lastLink = str_replace(['<', '>'], '', $link[0]);
-            } elseif ($link['rel'] == 'next') {
+            if ($link['rel'] == 'next') {
                 $this->_nextLink = str_replace(['<', '>'], '', $link[0]);
-            } elseif ($link['rel'] == 'prev') {
-                $this->_prevLink = str_replace(['<', '>'], '', $link[0]);
             }
         }
     }
@@ -167,16 +162,6 @@ class GuzzleClient implements ApiClientInterface
     public function getNextLink()
     {
         return $this->_nextLink;
-    }
-
-    public function getPrevLink()
-    {
-        return $this->_prevLink;
-    }
-
-    public function getLastLink()
-    {
-        return $this->_lastLink;
     }
 
     public function getResponse()

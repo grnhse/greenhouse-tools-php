@@ -13,9 +13,9 @@ class ApiService
     
     const APPLICATION_URL = 'https://boards-api.greenhouse.io/v1/applications/';
     const API_V1_URL = 'https://boards-api.greenhouse.io/v1/';
-    const HARVEST_V1_URL = 'https://harvest.greenhouse.io/v1/';
+    const HARVEST_V3_URL = 'https://harvest.greenhouse.io/v3/';
     const HARVEST_BASE_URL = 'https://harvest.greenhouse.io/';
-    
+
     public function setClient($apiClient)
     {
         $this->_apiClient = $apiClient;

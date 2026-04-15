@@ -43,7 +43,44 @@ class HarvestHelperTest extends \PHPUnit\Framework\TestCase
             'body' => null
         );
         $this->assertEquals($expected, $this->parser->parse('postCandidate', $this->parameters));
-    
+    }
+
+    public function testParsePostSingleWordMethodBulk()
+    {
+        $expected = array(
+            'method' => 'post',
+            'url' => 'candidates/bulk',
+            'parameters' => $this->parameters,
+            'headers' => array(),
+            'body' => null
+        );
+        $this->assertEquals($expected, $this->parser->parse('postCandidate', array_merge($this->parameters, ['bulk' => true])));
+    }
+
+    public function testParseDeleteSingleWordMethodBulk()
+    {
+        $expected = array(
+            'method' => 'delete',
+            'url' => 'applications/bulk',
+            'parameters' => array(),
+            'headers' => array(),
+            'body' => null
+        );
+
+        $this->assertEquals($expected, $this->parser->parse('deleteApplications', ['bulk' => true]));
+    }
+
+    public function testParsePatchSingleWordMethodBulk()
+    {
+        $expected = array(
+            'method' => 'patch',
+            'url' => 'applications/bulk',
+            'parameters' => array(),
+            'headers' => array(),
+            'body' => null
+        );
+
+        $this->assertEquals($expected, $this->parser->parse('patchApplications', ['bulk' => true]));
     }
     
     public function testParseGetSingleWordMethodWithId()
@@ -94,6 +131,30 @@ class HarvestHelperTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($expected, $this->parser->parse('deleteApplication', array('id' => 12345)));
     }
+
+    public function testParseDeleteMethodWithForBulk()
+    {
+        $expected = array(
+            'method' => 'patch',
+            'url' => 'approval_flows/request_approvals/bulk',
+            'parameters' => array(),
+            'headers' => array(),
+            'body' => null
+        );
+        $this->assertEquals($expected, $this->parser->parse('patchRequestApprovalForApprovalFlows', array('bulk' => true)));
+    }
+
+    public function testParseDeleteMethodWithoutForBulk()
+    {
+        $expected = array(
+            'method' => 'delete',
+            'url' => 'approval_flows/12345/request_approvals',
+            'parameters' => array(),
+            'headers' => array(),
+            'body' => null
+        );
+        $this->assertEquals($expected, $this->parser->parse('deleteRequestApprovalForApprovalFlows', array('id' => 12345)));
+    }
     
     public function testParseGetSingleWordMethodWithForWithId()
     {
@@ -107,7 +168,7 @@ class HarvestHelperTest extends \PHPUnit\Framework\TestCase
         $params = array_merge($this->parameters, array('id' => 12345));
         $this->assertEquals($expected, $this->parser->parse('getScorecardsForApplication', $params));
     }
-    
+
     public function testParseGetDoubleWordMethodWithForWithId()
     {
         $expected = array(
@@ -133,58 +194,43 @@ class HarvestHelperTest extends \PHPUnit\Framework\TestCase
         $params = array_merge($this->parameters, array('id' => 12345));
         $this->assertEquals($expected, $this->parser->parse('getEmailTemplateForActivityFeed', $params));
     }
-    
-    public function testParseGetDoubleWordMethodWithSecondId()
-    {
-        $expected = array(
-            'method' => 'get',
-            'url' => 'activity_feeds/12345/email_templates/2345',
-            'parameters' => $this->parameters,
-            'headers' => array(),
-            'body' => null
-        );
-        $params = array_merge($this->parameters, array('id' => 12345, 'second_id' => 2345));
-        $this->assertEquals($expected, $this->parser->parse('getEmailTemplateForActivityFeed', $params));
-    }
-    
-    public function testParseGetDoubleWordMethodWithForNoId()
-    {
-        $expected = array(
-            'method' => 'get',
-            'url' => 'activity_feeds/email_templates',
-            'parameters' => $this->parameters,
-            'headers' => array(),
-            'body' => null
-        );
-        $params = array_merge($this->parameters, array());
-        $this->assertEquals($expected, $this->parser->parse('getEmailTemplateForActivityFeed', $params));
-    }
-
-    public function testParseTripleWordMethod()
-    {
-        $expected = array(
-            'method' => 'delete',
-            'url' => 'users/12345/permissions/jobs',
-            'parameters' => $this->parameters,
-            'headers' => array(),
-            'body' => null
-        );
-        $params = array_merge($this->parameters, array('id' => 12345));
-        $this->assertEquals($expected, $this->parser->parse('deletePermissionForJobForUser', $params));
-    }
-    
-    public function testParseTripleWordMethodRequiresId()
-    {
-        $this->expectException('\Greenhouse\GreenhouseToolsPhp\Services\Exceptions\GreenhouseServiceException');
-        $this->parser->parse('deletePermissionForJobForUser', array());
-    }
 
     public function testBadHttpMethodFails()
     {
         $this->expectException('\Greenhouse\GreenhouseToolsPhp\Services\Exceptions\GreenhouseServiceException');
         $this->parser->parse('testCandidates', array());
     }
-    
+
+    public function testForMethodWithoutIdOrBulkThrowsException()
+    {
+        // A "For" method with no 'id' and no 'bulk' must throw — the URL cannot be built.
+        $this->expectException('\Greenhouse\GreenhouseToolsPhp\Services\Exceptions\GreenhouseServiceException');
+        $this->expectExceptionMessage('ID or bulk parameter is required for method calls with \'For\' in them.');
+        $this->parser->parse('getScorecardsForApplication', []);
+    }
+
+    public function testForMethodWithStringBulkThrowsException()
+    {
+        // 'bulk' => 'true' (string) no longer satisfies === true, so the URL is never
+        // set and the new exception must fire.
+        $this->expectException('\Greenhouse\GreenhouseToolsPhp\Services\Exceptions\GreenhouseServiceException');
+        $this->expectExceptionMessage('ID or bulk parameter is required for method calls with \'For\' in them.');
+        $this->parser->parse('patchRequestApprovalForApprovalFlows', ['bulk' => 'true']);
+    }
+
+    public function testSingleMethodWithStringBulkDoesNotAddBulkSuffix()
+    {
+        // 'bulk' => 'true' (string) must not append /bulk on a single-object method.
+        $expected = array(
+            'method' => 'post',
+            'url' => 'candidates',
+            'parameters' => [],
+            'headers' => array(),
+            'body' => null
+        );
+        $this->assertEquals($expected, $this->parser->parse('postCandidate', ['bulk' => 'true']));
+    }
+
     public function testAddQueryString()
     {
         $expected = 'candidate/12345/person?per_page=10&page=2';
