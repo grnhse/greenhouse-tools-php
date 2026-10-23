@@ -36,7 +36,7 @@ class GreenhouseService
     }
     
     /**
-     * The Appliction API Service handles posting applications in to Greenhouse.  This
+     * The Application API Service handles posting applications in to Greenhouse.  This
      * requires your API key to be set.
      */
     public function getApplicationApiService()

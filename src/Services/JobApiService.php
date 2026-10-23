@@ -63,7 +63,7 @@ class JobApiService extends ApiService
     }
     
     /**
-     * GET $baseUrl/office?id=$id
+     * GET $baseUrl/department?id=$id
      *
      * @param   $id     number      The id of the department to retrieve
      * @return  string  JSON response string from Greenhouse API.
@@ -88,7 +88,7 @@ class JobApiService extends ApiService
     /**
      * GET $baseUrl/jobs(?content=true)
      *
-     * @param   boolean     $content    Append the content paramenter to get the
+     * @param   boolean     $content    Append the content parameter to get the
      *                                      job post content, department, and office.
      * @return  string      JSON response string from Greenhouse API.
      * @throws  GreenhouseAPIResponseException for non-200 responses
@@ -103,7 +103,7 @@ class JobApiService extends ApiService
      * GET $baseUrl/job?id=$id(?questions=true)
      *
      * @param   $id         number      The id of the job to retrieve
-     * @param   $question   boolean     Append the question paramenter to get the
+     * @param   $question   boolean     Append the question parameter to get the
      *                                      question info in the job response.
      * @return  string      JSON response string from Greenhouse API.
      * @throws  GreenhouseAPIResponseException for non-200 responses
@@ -119,7 +119,7 @@ class JobApiService extends ApiService
      * just the uriString if it's false.
      *
      * @param   string  $uriString      A base string.
-     * @param   boolean $showConent     If true, appends ?content=true to $uriString
+     * @param   boolean $showContent    If true, appends ?content=true to $uriString
      * @return  string
      */
     public function getContentQuery($uriString, $showContent=false)
