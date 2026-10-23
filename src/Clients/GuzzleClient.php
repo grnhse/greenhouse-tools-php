@@ -103,8 +103,8 @@ class GuzzleClient implements ApiClientInterface
     {
       $guzzleParams = array();
       /**
-       * There are three possibile inputs for $postParameter values.  Strings, Curlfiles, and arrays.
-       * This look should process them in to something that Guzzle understands.
+       * There are three possible inputs for $postParameter values.  Strings, Curlfiles, and arrays.
+       * This loop should process them in to something that Guzzle understands.
        */
       foreach ($postParameters as $key => $value) {
         if ($value instanceof \CURLFile) {
@@ -122,7 +122,7 @@ class GuzzleClient implements ApiClientInterface
 
             // $val is an array, potentially containing nested elements that need to be serialized in
             // a way that the API accepts. See the `curl` example in the documentation to better understand the
-            // nested array sturcture: https://developers.greenhouse.io/job-board.html#submit-an-application
+            // nested array structure: https://developers.greenhouse.io/job-board.html#submit-an-application
             // Namely, arrays must be non-indexed, e.g. myarray[][mykey]=value instead of myarray[0][mykey]=value
             $query = http_build_query($val);
             $query = preg_replace('/%5B[\d]+%5D/simU', '%5B%5D', $query);
